@@ -1,0 +1,46 @@
+`data classification: {{classification}}`
+{{#each metadata}}
+    {{#each this}}
+        `{{@key}}: {{this}}`
+    {{/each}}
+{{/each}}
+
+# {{id}}
+
+- [General](#general)
+- [Dependencies](#dependencies)
+- [Dependants](#dependants)
+
+# General <a name="general"></a>
+{{description}}
+
+# Dependencies Lineage <a name="dependencies"></a>
+
+![image](./dependencies.png)
+
+{{#each dependencies}}
+- [{{this.type}} - {{this.id}}]({{this.link}})
+{{/each}}
+
+# Dependants Lineage <a name="dependants"></a>
+
+![image](./dependants.png)
+
+{{#each dependants}}
+- [{{this.type}} - {{this.id}}]({{this.link}})
+{{/each}}
+
+# Direct Sources
+
+{{#each sources}}
+{{> store }}
+{{/each}}
+
+# Targets
+
+{{#each targets}}
+{{> store }}
+{{/each}}
+
+# Flow
+

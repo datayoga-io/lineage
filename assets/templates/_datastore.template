@@ -1,0 +1,24 @@
+## {{capitalize this.type}}: {{this.id}}
+
+{{this.description}}
+
+
+| Column    | Type        | Comments |
+| --------- | ----------- | -------- |
+{{#each this.columns}}
+| {{this.name}} | {{this.type}} | {{this.comments}} |
+{{/each}}
+
+{{#switch this.type}}
+{{#case 'file'}}
+format: {{../this.format}}
+
+file name regular expression: `{{../this.path}}`
+
+header rows: {{../this.skip_header_rows}}
+
+footer rows: {{../this.skip_footer_rows}}
+
+[more details](files/ssbnav.md)
+{{/case}}
+{{/switch}}

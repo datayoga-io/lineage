@@ -1,0 +1,8 @@
+id: pipeline:order_mgmt.load_orders
+title: Load order from SAP
+description: |
+  Loads orders from raw order system. Performs the following calculation on order value:
+    ```order_value = order_qty * order_line_item_value```
+classification: PII
+metadata:
+  - triggers: file_arrival
