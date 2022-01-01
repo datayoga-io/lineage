@@ -1,3 +1,4 @@
+import glob from "fast-glob";
 import Handlebars from "handlebars";
 import yaml from "js-yaml";
 import * as path from "path";
@@ -7,10 +8,11 @@ import renderPipeline from "./renderPipeline";
 import { graphRenderOptions } from "./defaultOptions";
 
 function loadCatalog(folder: string): any {
-  // JSON.parse(fs.readFileSync("./input/catalog.json", "utf-8"));
-  const catalogDir = "./input/catalog";
-  const file = "sample.yaml";
-  return yaml.load(fs.readFileSync(catalogDir + path.sep + file, "utf8"));
+  const catalog = {};
+  for (const filename of glob.sync(path.join(folder, "catalog", "*.yaml"))) {
+    Object.assign(catalog, yaml.load(fs.readFileSync(filename), "utf8"));
+  }
+  return catalog;
 }
 
 function loadPipeline(pipeline: string): any {
@@ -57,34 +59,36 @@ export default async function render(argv) {
 
   registerHandleBarsHelpers();
 
-  // load the templates
-  const pipelineTemplateText: string = fs.readFileSync(
-    path.join(templatesFolder, "pipeline.template"),
-    "utf-8"
-  );
-
+  //
   // load the partials
-  const partialDataStoreText: string = fs.readFileSync(
-    path.join(templatesFolder, "_datastore.template"),
-    "utf-8"
-  );
-  Handlebars.registerPartial("store", Handlebars.compile(partialDataStoreText));
+  //
+  const files = glob;
+  for (const filename of glob.sync(path.join(templatesFolder, "_*.template"))) {
+    Handlebars.registerPartial(
+      path.basename(filename, ".template").substring(1),
+      Handlebars.compile(fs.readFileSync(filename, "utf-8"))
+    );
+  }
 
-  const pipelineTemplate = Handlebars.compile(pipelineTemplateText, {
-    noEscape: true,
-    strict: false,
-  });
+  // load the templates
+  const pipelineTemplate = loadTemplate(
+    path.join(templatesFolder, "pipeline.template")
+  );
+  const datastoreTemplate = loadTemplate(
+    path.join(templatesFolder, "datastore.template")
+  );
+  const fileTemplate = loadTemplate(
+    path.join(templatesFolder, "file.template")
+  );
 
   // merge the metadata to the pipelines
   let pipelines = Object.keys(catalog).filter((node) =>
     node.startsWith("pipeline:")
   );
 
-  // console.log(entities);
-  //   const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
-
   // remove the docs folder
   fse.removeSync(path.join(".", "docs"));
+
   //
   // loop over each pipline
   //
@@ -95,10 +99,50 @@ export default async function render(argv) {
     // load pipline metadata
     const metadata = loadPipeline(pipeline);
 
-    await renderPipeline(pipeline, metadata, pipelineTemplate, relations, {
-      graphRenderOptions: graphRenderOptions,
-    });
+    await renderPipeline(
+      "pipeline",
+      pipeline,
+      metadata,
+      pipelineTemplate,
+      relations,
+      {
+        graphRenderOptions: graphRenderOptions,
+      }
+    );
   }
   process.stdout.write("\n");
+
+  //
+  // loop over each datastore
+  //
+  let datastores = Object.entries(catalog).filter(([key, node]) =>
+    key.startsWith("datastore:")
+  );
+  for (let [datastore, metadata] of datastores) {
+    process.stdout.clearLine(0);
+    process.stdout.cursorTo(0);
+    process.stdout.write(`generating ${datastore}`);
+
+    await renderPipeline(
+      "datastore",
+      datastore,
+      metadata,
+      pipelineTemplate,
+      relations,
+      {
+        graphRenderOptions: graphRenderOptions,
+      }
+    );
+  }
+  process.stdout.write("\n");
+
   console.log("done");
+}
+
+function loadTemplate(filename: string): HandlebarsTemplateDelegate {
+  const pipelineTemplateText: string = fs.readFileSync(filename, "utf-8");
+  return Handlebars.compile(pipelineTemplateText, {
+    noEscape: true,
+    strict: false,
+  });
 }

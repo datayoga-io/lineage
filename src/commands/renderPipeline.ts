@@ -17,8 +17,9 @@ import { IRenderOptions } from "@datayoga-io/node-g6";
     graphRenderOptions: IRenderOptions;
 } options - Rendering options
 */
-export default async function renderPipeline(
-  pipeline: string,
+export default async function renderNode(
+  type: string,
+  id: string,
   metadata: any,
   template: HandlebarsTemplateDelegate,
   relations: {
@@ -43,19 +44,19 @@ export default async function renderPipeline(
   //
   // create the filename as the full path of the module (separated by '.')
   //
-  let pipelinePath = pipeline.split(".");
+  let pipelinePath = id.split(".");
 
   //
   // dependants graph
   //
-  const dependantsTree = getDependantsGraph(data, pipeline);
+  const dependantsTree = getDependantsGraph(data, id);
 
   const dependantsBinaryData = await graph.render(
     dependantsTree,
     options.graphRenderOptions
   );
   const dependants = dependantsTree.nodes
-    .filter((node) => node.id != pipeline)
+    .filter((node) => node.id != id)
     .map((node) => ({
       type: node.id.split(":")[0],
       id: node.id.split(":")[1],
@@ -65,13 +66,13 @@ export default async function renderPipeline(
   //
   // dependencies graph
   //
-  const dependenciesTree = getDependenciesGraph(data, pipeline);
+  const dependenciesTree = getDependenciesGraph(data, id);
   const dependenciesBinaryData = await graph.render(
     dependenciesTree,
     graphRenderOptions
   );
   const dependencies = dependenciesTree.nodes
-    .filter((node) => node.id != pipeline)
+    .filter((node) => node.id != id)
     .map((node) => ({
       type: node.id.split(":")[0],
       id: node.id.split(":")[1],
@@ -89,22 +90,12 @@ export default async function renderPipeline(
     template(
       Object.assign(
         {
-          id: pipeline,
-          dependants: dependants,
-          dependencies: dependencies,
+          id,
+          dependants,
+          dependencies,
         },
         metadata
       )
-    )
-  );
-  console.log(
-    Object.assign(
-      {
-        id: pipeline,
-        dependants: dependants,
-        dependencies: dependencies,
-      },
-      metadata
     )
   );
 

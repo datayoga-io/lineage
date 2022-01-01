@@ -1,0 +1,11 @@
+datastore:orders:
+  columns:
+    - name: order_id
+      datatype: numeric
+      description: order number
+      primary_key: True
+    - name: customer_id
+      datatype: numeric
+      description: customer number
+      primary_key: False
+datastore:raw_orders:

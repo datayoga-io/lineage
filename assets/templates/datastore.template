@@ -5,7 +5,7 @@
     {{/each}}
 {{/each}}
 
-# {{type}} {{id}}
+# {{id}}
 
 - [General](#general)
 - [Dependencies](#dependencies)
@@ -14,13 +14,23 @@
 # General <a name="general"></a>
 {{description}}
 
+{{> store }}
+
 # Dependencies Lineage <a name="dependencies"></a>
 
-{{>dependencies}}
+![image](./dependencies.png)
+
+{{#each dependencies}}
+- [{{this.type}} - {{this.id}}]({{this.link}})
+{{/each}}
 
 # Dependants Lineage <a name="dependants"></a>
 
-{{>dependants}}
+![image](./dependants.png)
+
+{{#each dependants}}
+- [{{this.type}} - {{this.id}}]({{this.link}})
+{{/each}}
 
 # Direct Sources
 

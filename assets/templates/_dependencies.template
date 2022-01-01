@@ -1,0 +1,8 @@
+{{#if dependencies.length}}
+![image](./dependencies.png)
+{{else}}
+No dependencies found
+{{/if}}
+{{#each dependencies}}
+- [{{this.type}} - {{this.id}}]({{this.link}})
+{{/each}}
