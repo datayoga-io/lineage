@@ -2,12 +2,7 @@
 
 {{this.description}}
 
-
-| Column    | Type        | Comments |
-| --------- | ----------- | -------- |
-{{#each this.columns}}
-| {{this.name}} | {{this.type}} | {{this.comments}} |
-{{/each}}
+{{> schema this.schema}}
 
 {{#switch this.type}}
 {{#case 'file'}}

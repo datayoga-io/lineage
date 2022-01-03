@@ -1,11 +1,25 @@
 datastore:orders:
-  columns:
-    - name: order_id
-      datatype: numeric
-      description: order number
-      primary_key: True
-    - name: customer_id
-      datatype: numeric
-      description: customer number
-      primary_key: False
+  doc: orders table
+  schema:
+    fields:
+      - name: order_id
+        type: int
+        doc: order number
+        primary_key: True
+      - name: customer_id
+        type: double
+        doc: customer number
+        primary_key: False
+      - name: name
+        type: string
+        doc: customer name
 datastore:raw_orders:
+  doc: raw_orders loaded from export files in ELT
+  schema:
+    fields:
+      - name: order_id
+        type: int
+        doc: order number
+      - name: customer_id
+        type: int
+        description: customer number

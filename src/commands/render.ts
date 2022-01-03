@@ -29,7 +29,7 @@ function loadRelations(folder: string): any {
 
 function registerHandleBarsHelpers() {
   Handlebars.registerHelper("capitalize", function (aString) {
-    return aString.charAt(0).toUpperCase() + aString.slice(1);
+    return aString && aString.charAt(0).toUpperCase() + aString.slice(1);
   });
   Handlebars.registerHelper("switch", (value: string, options: any) => {
     (this as any).switch_value = value;
@@ -89,52 +89,29 @@ export default async function render(argv) {
   // remove the docs folder
   fse.removeSync(path.join(".", "docs"));
 
-  //
-  // loop over each pipline
-  //
-  for (let pipeline of pipelines) {
-    process.stdout.clearLine(0);
-    process.stdout.cursorTo(0);
-    process.stdout.write(`generating ${pipeline}`);
-    // load pipline metadata
-    const metadata = loadPipeline(pipeline);
-
-    await renderPipeline(
-      "pipeline",
-      pipeline,
-      metadata,
-      pipelineTemplate,
-      relations,
-      {
-        graphRenderOptions: graphRenderOptions,
-      }
-    );
-  }
-  process.stdout.write("\n");
+  await renderNodeType({
+    nodeType: "pipeline",
+    nodes: pipelines,
+    relations: relations,
+    template: pipelineTemplate,
+    enrichmentFunc: (pipeline) => loadPipeline(pipeline),
+  });
 
   //
-  // loop over each datastore
+  // filter only the elements starting with datastore:
   //
-  let datastores = Object.entries(catalog).filter(([key, node]) =>
-    key.startsWith("datastore:")
+  let datastores = Object.fromEntries(
+    Object.entries(catalog).filter(([key, node]) =>
+      key.startsWith("datastore:")
+    )
   );
-  for (let [datastore, metadata] of datastores) {
-    process.stdout.clearLine(0);
-    process.stdout.cursorTo(0);
-    process.stdout.write(`generating ${datastore}`);
-
-    await renderPipeline(
-      "datastore",
-      datastore,
-      metadata,
-      pipelineTemplate,
-      relations,
-      {
-        graphRenderOptions: graphRenderOptions,
-      }
-    );
-  }
-  process.stdout.write("\n");
+  await renderNodeType({
+    nodeType: "datastore",
+    nodes: Object.keys(datastores),
+    relations: relations,
+    metadata: datastores,
+    template: datastoreTemplate,
+  });
 
   console.log("done");
 }
@@ -145,4 +122,35 @@ function loadTemplate(filename: string): HandlebarsTemplateDelegate {
     noEscape: true,
     strict: false,
   });
+}
+async function renderNodeType({
+  nodeType,
+  nodes,
+  template,
+  metadata,
+  relations,
+  enrichmentFunc,
+}: {
+  nodeType: string;
+  nodes: any[];
+  metadata?: { [node: string]: any };
+  relations: { source: string; target: string }[];
+  template: HandlebarsTemplateDelegate;
+  enrichmentFunc?: Function;
+}) {
+  // loop over each node
+  for (let node of nodes) {
+    console.log(`generating ${node}`);
+    // load pipline metadata
+    let properties = {};
+    if (metadata && metadata[node]) {
+      properties = metadata[node];
+    } else if (enrichmentFunc) {
+      properties = enrichmentFunc(node);
+    }
+
+    await renderPipeline(nodeType, node, properties, template, relations, {
+      graphRenderOptions: graphRenderOptions,
+    });
+  }
 }

@@ -1,6 +1,6 @@
 `data classification: `
 
-#  datastore:orders
+# datastore:orders
 
 - [General](#general)
 - [Dependencies](#dependencies)
@@ -8,6 +8,14 @@
 
 # General <a name="general"></a>
 
+orders table
+
+# Schema
+| Column    | Type        | Comments |
+| --------- | ----------- | -------- |
+| order_id | int | order number |
+| customer_id | double | customer number |
+| name | string | customer name |
 
 # Dependencies Lineage <a name="dependencies"></a>
 
@@ -19,11 +27,4 @@
 
 No dependants found
 
-# Direct Sources
-
-
-# Targets
-
-
-# Flow
 

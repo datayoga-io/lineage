@@ -1,0 +1,5 @@
+| Column    | Type        | Comments |
+| --------- | ----------- | -------- |
+{{#each this.fields}}
+| {{this.name}} | {{this.type}} | {{this.doc}} |
+{{/each}}

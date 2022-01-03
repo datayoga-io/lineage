@@ -13,36 +13,20 @@
 
 # General <a name="general"></a>
 {{description}}
+{{doc}}
 
-{{> store }}
+# Schema
+{{> schema this.schema }}
 
 # Dependencies Lineage <a name="dependencies"></a>
 
-![image](./dependencies.png)
-
-{{#each dependencies}}
-- [{{this.type}} - {{this.id}}]({{this.link}})
-{{/each}}
+{{>dependencies}}
 
 # Dependants Lineage <a name="dependants"></a>
 
-![image](./dependants.png)
+{{>dependants}}
 
 {{#each dependants}}
 - [{{this.type}} - {{this.id}}]({{this.link}})
 {{/each}}
-
-# Direct Sources
-
-{{#each sources}}
-{{> store }}
-{{/each}}
-
-# Targets
-
-{{#each targets}}
-{{> store }}
-{{/each}}
-
-# Flow
 

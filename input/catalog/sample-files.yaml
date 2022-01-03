@@ -1,3 +1,35 @@
-file:raw_orders:
-  - delimiter: ","
-  - header: true
+file:exported_orders:
+  filename: orders_{[0-9]}6.csv
+  format: delimited
+  delimiter: ","
+  header: true
+  schema:
+    fields:
+      - name: order_id
+        type: int
+        doc: order number
+      - name: order_date
+        type: string
+        dateformat: MM/dd/YYYY
+        description: order date
+file:customers:
+  filename: customer_full.json
+  doc: example of a json file with nested schema
+  format: json
+  schema:
+    type: record
+    fields:
+      - name: customer_id
+        type: int
+        doc: customer identifier
+      - name: address
+        type: record
+        fields:
+          - name: street
+            type: string
+          - name: city
+            type: string
+          - name: state
+            type: string
+          - name: zip
+            type: string
