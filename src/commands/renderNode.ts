@@ -14,6 +14,7 @@ import { IRenderOptions } from "@datayoga-io/node-g6";
     target: string;
   }[] relations - Array of edges of lineage to other objects
 * @param {
+    baseUrl?: string
     graphRenderOptions: IRenderOptions;
 } options - Rendering options
 */
@@ -28,6 +29,7 @@ export default async function renderNode(
     target: string;
   }[],
   options: {
+    baseUrl?: string;
     graphRenderOptions: IRenderOptions;
   }
 ) {
@@ -74,7 +76,7 @@ export default async function renderNode(
     .map((node) => ({
       type: node.id.split(":")[0],
       id: node.id.split(":")[1],
-      link: createLink(node.id),
+      link: createLink(node.id, options.baseUrl || ""),
     }));
 
   //
@@ -99,7 +101,7 @@ export default async function renderNode(
     .map((node) => ({
       type: node.id.split(":")[0],
       id: node.id.split(":")[1],
-      link: createLink(node.id),
+      link: createLink(node.id, options.baseUrl || ""),
     }));
 
   // write markdown file
@@ -120,9 +122,11 @@ export default async function renderNode(
   );
 }
 
-function createLink(id: string) {
+function createLink(id: string, baseUrl: string = "") {
   let type = id.split(":")[0];
   let fullname = id.split(":")[1];
   let fullpath = fullname.split(".");
-  return `${type}s/${fullpath.join("/")}/${fullpath[fullpath.length - 1]}.md`;
+  return `${baseUrl}${type}s/${fullpath.join("/")}/${
+    fullpath[fullpath.length - 1]
+  }.md`;
 }

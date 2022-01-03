@@ -4,7 +4,7 @@ import yaml from "js-yaml";
 import * as path from "path";
 import * as fs from "fs";
 import * as fse from "fs-extra";
-import renderPipeline from "./renderPipeline";
+import renderNode from "./renderNode";
 import { graphRenderOptions } from "./defaultOptions";
 
 function loadCatalog(folder: string): any {
@@ -104,6 +104,9 @@ export default async function render(argv) {
     relations: relations,
     template: pipelineTemplate,
     enrichmentFunc: (pipeline) => loadPipeline(argv.folder, pipeline),
+    options: {
+      baseUrl: argv.baseurl,
+    },
   });
 
   //
@@ -121,6 +124,9 @@ export default async function render(argv) {
     relations: relations,
     metadata: datastores,
     template: datastoreTemplate,
+    options: {
+      baseUrl: argv.baseurl,
+    },
   });
 
   console.log("done");
@@ -141,6 +147,7 @@ async function renderNodeType({
   metadata,
   relations,
   enrichmentFunc,
+  options = {},
 }: {
   folder: string;
   nodeType: string;
@@ -149,6 +156,7 @@ async function renderNodeType({
   relations: { source: string; target: string }[];
   template: HandlebarsTemplateDelegate;
   enrichmentFunc?: Function;
+  options?: any;
 }) {
   // loop over each node
   for (let node of nodes) {
@@ -160,17 +168,9 @@ async function renderNodeType({
     } else if (enrichmentFunc) {
       properties = enrichmentFunc(node);
     }
-
-    await renderPipeline(
-      folder,
-      nodeType,
-      node,
-      properties,
-      template,
-      relations,
-      {
-        graphRenderOptions: graphRenderOptions,
-      }
-    );
+    await renderNode(folder, nodeType, node, properties, template, relations, {
+      baseUrl: options["baseUrl"] || "",
+      graphRenderOptions: graphRenderOptions,
+    });
   }
 }

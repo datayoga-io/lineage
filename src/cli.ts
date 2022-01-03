@@ -16,6 +16,10 @@ yargs
           alias: "d",
           description: "destination directory",
           default: "./docs",
+        })
+        .option("baseurl", {
+          description: "baseurl to prepend to links",
+          default: "",
         });
     },
     async (argv: any) => {
