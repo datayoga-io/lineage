@@ -8,23 +8,31 @@ import renderPipeline from "./renderPipeline";
 import { graphRenderOptions } from "./defaultOptions";
 
 function loadCatalog(folder: string): any {
-  const catalog = {};
-  for (const filename of glob.sync(path.join(folder, "catalog", "*.yaml"))) {
-    Object.assign(catalog, yaml.load(fs.readFileSync(filename), "utf8"));
+  const files = glob.sync(path.join(folder, "catalog", "**", "*.yaml"));
+  let catalog = {};
+  for (let filename of files) {
+    const contents = yaml.load(fs.readFileSync(filename, "utf8"));
+    catalog = { ...catalog, ...contents };
   }
   return catalog;
 }
 
-function loadPipeline(pipeline: string): any {
-  const catalogDir = "./input/pipelines";
-  const file = "sample.yaml";
-  return yaml.load(fs.readFileSync(catalogDir + path.sep + file, "utf8"));
+function loadPipeline(folder: string, pipeline: string): any | null {
+  // load a pipeline file on demand
+  const filename = path.join(folder, "pipelines", pipeline + ".yaml");
+  if (fs.existsSync(filename)) {
+    return yaml.load(fs.readFileSync(filename, "utf8"));
+  } else return null;
 }
 
 function loadRelations(folder: string): any {
-  const catalogDir = "./input/relations";
-  const file = "sample.yaml";
-  return yaml.load(fs.readFileSync(catalogDir + path.sep + file, "utf8"));
+  const files = glob.sync(path.join(folder, "relations", "**", "*.yaml"));
+  const relations = [];
+  for (let filename of files) {
+    const contents = yaml.load(fs.readFileSync(filename, "utf8"));
+    relations.push(...contents);
+  }
+  return relations;
 }
 
 function registerHandleBarsHelpers() {
@@ -87,14 +95,15 @@ export default async function render(argv) {
   );
 
   // remove the docs folder
-  fse.removeSync(path.join(".", "docs"));
+  fse.removeSync(argv.dest);
 
   await renderNodeType({
+    folder: argv.dest,
     nodeType: "pipeline",
     nodes: pipelines,
     relations: relations,
     template: pipelineTemplate,
-    enrichmentFunc: (pipeline) => loadPipeline(pipeline),
+    enrichmentFunc: (pipeline) => loadPipeline(argv.folder, pipeline),
   });
 
   //
@@ -106,6 +115,7 @@ export default async function render(argv) {
     )
   );
   await renderNodeType({
+    folder: argv.dest,
     nodeType: "datastore",
     nodes: Object.keys(datastores),
     relations: relations,
@@ -124,6 +134,7 @@ function loadTemplate(filename: string): HandlebarsTemplateDelegate {
   });
 }
 async function renderNodeType({
+  folder,
   nodeType,
   nodes,
   template,
@@ -131,6 +142,7 @@ async function renderNodeType({
   relations,
   enrichmentFunc,
 }: {
+  folder: string;
   nodeType: string;
   nodes: any[];
   metadata?: { [node: string]: any };
@@ -149,8 +161,16 @@ async function renderNodeType({
       properties = enrichmentFunc(node);
     }
 
-    await renderPipeline(nodeType, node, properties, template, relations, {
-      graphRenderOptions: graphRenderOptions,
-    });
+    await renderPipeline(
+      folder,
+      nodeType,
+      node,
+      properties,
+      template,
+      relations,
+      {
+        graphRenderOptions: graphRenderOptions,
+      }
+    );
   }
 }

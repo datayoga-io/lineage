@@ -1,8 +1,9 @@
 `data classification: `
 
-# datastore:raw_orders
+# datastore raw_orders
 
 - [General](#general)
+- [Schema](#schema)
 - [Dependencies](#dependencies)
 - [Dependants](#dependants)
 
@@ -10,7 +11,7 @@
 
 raw_orders loaded from export files in ELT
 
-# Schema
+# Schema <a name="schema"></a>
 | Column    | Type        | Comments |
 | --------- | ----------- | -------- |
 | order_id | int | order number |
@@ -18,7 +19,9 @@ raw_orders loaded from export files in ELT
 
 # Dependencies Lineage <a name="dependencies"></a>
 
-No dependencies found
+![image](./dependencies.png)
+- [pipeline - ELT.load_raw_orders](pipelines/ELT/load_raw_orders/load_raw_orders.md)
+- [file - exported_orders](files/exported_orders/exported_orders.md)
 
 # Dependants Lineage <a name="dependants"></a>
 

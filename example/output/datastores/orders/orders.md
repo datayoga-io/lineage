@@ -1,8 +1,9 @@
 `data classification: `
 
-# datastore:orders
+# datastore orders
 
 - [General](#general)
+- [Schema](#schema)
 - [Dependencies](#dependencies)
 - [Dependants](#dependants)
 
@@ -10,7 +11,7 @@
 
 orders table
 
-# Schema
+# Schema <a name="schema"></a>
 | Column    | Type        | Comments |
 | --------- | ----------- | -------- |
 | order_id | int | order number |
@@ -22,6 +23,9 @@ orders table
 ![image](./dependencies.png)
 - [pipeline - order_mgmt.load_orders](pipelines/order_mgmt/load_orders/load_orders.md)
 - [datastore - raw_orders](datastores/raw_orders/raw_orders.md)
+- [pipeline - ELT.load_raw_orders](pipelines/ELT/load_raw_orders/load_raw_orders.md)
+- [file - exported_orders](files/exported_orders/exported_orders.md)
+- [file - customers](files/customers/customers.md)
 
 # Dependants Lineage <a name="dependants"></a>
 

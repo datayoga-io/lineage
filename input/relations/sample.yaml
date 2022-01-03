@@ -1,4 +1,0 @@
-- source: datastore:raw_orders
-  target: pipeline:order_mgmt.load_orders
-- source: pipeline:order_mgmt.load_orders
-  target: datastore:orders

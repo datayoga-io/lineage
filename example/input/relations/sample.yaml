@@ -1,0 +1,10 @@
+- source: datastore:raw_orders
+  target: pipeline:order_mgmt.load_orders
+- source: pipeline:order_mgmt.load_orders
+  target: datastore:orders
+- source: file:exported_orders
+  target: pipeline:ELT.load_raw_orders
+- source: pipeline:ELT.load_raw_orders
+  target: datastore:raw_orders
+- source: file:customers
+  target: pipeline:order_mgmt.load_orders

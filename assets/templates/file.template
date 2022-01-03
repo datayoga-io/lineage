@@ -36,11 +36,10 @@
 {{> store }}
 {{/each}}
 
-# Targets
+# Direct Targets
 
 {{#each targets}}
 {{> store }}
 {{/each}}
 
-# Flow
 

@@ -18,6 +18,7 @@ import { IRenderOptions } from "@datayoga-io/node-g6";
 } options - Rendering options
 */
 export default async function renderNode(
+  folder: string,
   type: string,
   id: string,
   metadata: any,
@@ -44,17 +45,30 @@ export default async function renderNode(
   //
   // create the filename as the full path of the module (separated by '.')
   //
-  let pipelinePath = id.split(".");
+  let [nodeType, nodeId] = id.split(":");
+  const nodePath = nodeId.split(".");
+
+  // set output folder
+  const outputFolder = path.join(folder, nodeType + "s", ...nodePath);
 
   //
   // dependants graph
   //
   const dependantsTree = getDependantsGraph(data, id);
 
-  const dependantsBinaryData = await graph.render(
-    dependantsTree,
-    options.graphRenderOptions
-  );
+  if (dependantsTree.edges.length > 0) {
+    const dependantsBinaryData = await graph.render(
+      dependantsTree,
+      options.graphRenderOptions
+    );
+
+    // write image to file
+    fse.outputFileSync(
+      path.join(outputFolder, "dependants.png"),
+      dependantsBinaryData,
+      "binary"
+    );
+  }
   const dependants = dependantsTree.nodes
     .filter((node) => node.id != id)
     .map((node) => ({
@@ -67,10 +81,19 @@ export default async function renderNode(
   // dependencies graph
   //
   const dependenciesTree = getDependenciesGraph(data, id);
-  const dependenciesBinaryData = await graph.render(
-    dependenciesTree,
-    graphRenderOptions
-  );
+  if (dependenciesTree.edges.length > 0) {
+    const dependenciesBinaryData = await graph.render(
+      dependenciesTree,
+      graphRenderOptions
+    );
+    // write image to file
+    fse.outputFileSync(
+      path.join(outputFolder, "dependencies.png"),
+      dependenciesBinaryData,
+      "binary"
+    );
+  }
+
   const dependencies = dependenciesTree.nodes
     .filter((node) => node.id != id)
     .map((node) => ({
@@ -78,37 +101,22 @@ export default async function renderNode(
       id: node.id.split(":")[1],
       link: createLink(node.id),
     }));
+
   // write markdown file
+
   fse.outputFileSync(
-    path.join(
-      ".",
-      "docs",
-      "pipelines",
-      ...pipelinePath,
-      `${pipelinePath[pipelinePath.length - 1]}.md`
-    ),
+    path.join(outputFolder, `${nodePath[nodePath.length - 1]}.md`),
     template(
       Object.assign(
         {
-          id,
+          id: nodeId,
+          type: nodeType,
           dependants,
           dependencies,
         },
         metadata
       )
     )
-  );
-
-  // write images to file
-  fs.writeFileSync(
-    path.join(".", "docs", "pipelines", ...pipelinePath, "dependencies.png"),
-    dependenciesBinaryData,
-    "binary"
-  );
-  fs.writeFileSync(
-    path.join(".", "docs", "pipelines", ...pipelinePath, "dependants.png"),
-    dependantsBinaryData,
-    "binary"
   );
 }
 

@@ -12,29 +12,33 @@ npm install -g @datayoga-io/lineage
 
 Lineage models the data ecosystem using the following entities:
 
-**Datastore** - A datastore represents a source or target of data that can hold data at rest or data in motion. Datastores include entities such as a table in a database, or a stream in Kafka. A Datastore can act either as a source or a target of a pipeline.
+`Datastore` - A datastore represents a source or target of data that can hold data at rest or data in motion. Datastores include entities such as a table in a database, a file, or a stream in Kafka. A Datastore can act either as a source or a target of a pipeline.
 
-**File** - A file is a type of Datastore that represents information stores in files. Files contain metadata about their structure and schema.
+`File` - A file is a type of Datastore that represents information stored in files. Files contain metadata about their structure and schema.
 
-**Dimension** - A dimension table / file is typically used for lookup and constant information that is managed as part of the application code. This often includes lookup values such as country codes.
+`Dimension` - A dimension table / file is typically used for lookup and constant information that is managed as part of the application code. This often includes lookup values such as country codes.
 
-**Runner** - A runner is a processing engine capable of running data operations. Every Runner supports one or more programming languages. Some Runners, like a database engine, only support SQL, while others like Spark may support Python, Scala, and Java.
+`Runner` - A runner is a processing engine capable of running data operations. Every Runner supports one or more programming languages. Some Runners, like a database engine, only support SQL, while others like Spark may support Python, Scala, and Java.
 
-**Pipeline** - A pipeline represents a series of **Jobs** that operate on a single **Runner**.
+`Consumer` - A consumer consumes data and presents it to a user. Consumers include reports, dashboards, and interactive applications.
 
-**Job** - A job is composed of a series of Steps that fetch information from one or more Datastores, transform them, and store the result in a target Datastore, or perform actions such as sending out alerts or performing HTTP calls.
+`Pipeline` - A pipeline represents a series of `Jobs` that operate on a single `Runner`.
 
-**Job Step** - Every step in a job performs a single action. A step can be of a certain _type_ representing the action it performs. A step can be an SQL statement, a Python statement, or a callout to a library. Steps can be chained to create a Directed Acyclic Graph (DAG).
+`Job` - A job is composed of a series of Steps that fetch information from one or more Datastores, transform them, and store the result in a target Datastore, or perform actions such as sending out alerts or performing HTTP calls.
+
+`Job Step` - Every step in a job performs a single action. A step can be of a certain _type_ representing the action it performs. A step can be an SQL statement, a Python statement, or a callout to a library. Steps can be chained to create a Directed Acyclic Graph (DAG).
 
 # Getting started
 
 # Usage
 
 ```
-dy-lineage -c/--catalog <input catalog file(s)> -e/--edges <input edge files> -p/--pipelines <pipeline yaml folder> -o <output folder>
+dy-lineage <input folder> -dest <output folder>
 ```
 
 Lineage will scan the file(s) specified in input and attempt to load information about the catalog. In addition, a folder containing yaml files describing each pipeline's business logic can be provided.
+
+See the [Example](./example) folder for sample input files and generated output files
 
 ## Structure of input folder
 
@@ -79,19 +83,16 @@ Example:
 
 ## Adding metadata and business logic flow to pipelines
 
-# Using with static content generators
-
-## VuePress
-
-## MkDocs
+TBD
 
 # Lineage collectors
+
+Lineage collectors enable to export lineage knowlege from external systems to be processed and documented.
+
+Coming soon
 
 ## Informatica
 
 ## Database data dictionary
 
 ## Tableau
-
-?? why isn't a file a type of datastore?
-?? why isn't Dimension a type of datastore?

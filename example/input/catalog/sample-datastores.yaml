@@ -1,4 +1,5 @@
 datastore:orders:
+  source: table
   doc: orders table
   schema:
     fields:
@@ -14,6 +15,7 @@ datastore:orders:
         type: string
         doc: customer name
 datastore:raw_orders:
+  source: table
   doc: raw_orders loaded from export files in ELT
   schema:
     fields:

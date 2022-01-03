@@ -5,9 +5,10 @@
     {{/each}}
 {{/each}}
 
-# {{id}}
+# {{type}} {{id}}
 
 - [General](#general)
+- [Schema](#schema)
 - [Dependencies](#dependencies)
 - [Dependants](#dependants)
 
@@ -15,7 +16,7 @@
 {{description}}
 {{doc}}
 
-# Schema
+# Schema <a name="schema"></a>
 {{> schema this.schema }}
 
 # Dependencies Lineage <a name="dependencies"></a>
