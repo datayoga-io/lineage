@@ -52,4 +52,5 @@ jobs:
           npm install -g @datayoga-io/lineage
       - name: test
         run: |
-          lineage --help
+          dy-lineage scaffold ./my-project
+          dy-lineage build ./my-project --dest ./docs

@@ -10,6 +10,20 @@ This package allows to generate documentation of data pipelines and data lineage
 npm install -g @datayoga-io/lineage
 ```
 
+# Quick Start
+
+To quickly get started with Lineage, scaffold a new project. This will create the folder structure along with sample files.
+
+```
+dy-lineage scaffold ./my-project
+```
+
+To generate the documentation for the new project:
+
+```
+dy-lineage build ./my-project --dest ./docs
+```
+
 # Data Entities
 
 Lineage models the data ecosystem using the following entities:

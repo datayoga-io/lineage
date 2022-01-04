@@ -13,7 +13,8 @@
   },
   "files": [
     "dist",
-    "assets"
+    "assets",
+    "example/input"
   ],
   "repository": {
     "type": "git",
