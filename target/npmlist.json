@@ -1,0 +1,1 @@
+{"version":"1.0.2","name":"@datayoga-io/lineage","dependencies":{"@datayoga-io/node-g6":{"version":"1.0.1"},"fast-glob":{"version":"3.2.7"},"fs-extra":{"version":"10.0.0"},"handlebars":{"version":"4.7.7"},"js-yaml":{"version":"4.1.0"}}}

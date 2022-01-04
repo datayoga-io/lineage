@@ -32,7 +32,7 @@
     "dag"
   ],
   "author": "DataYoga",
-  "license": "Apache",
+  "license": "https://www.apache.org/licenses/LICENSE-2.0.txt",
   "bugs": {
     "url": "https://github.com/datayoga-io/lineage/issues"
   },
