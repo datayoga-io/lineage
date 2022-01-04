@@ -12,7 +12,8 @@
     "dy-lineage": "./dist/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "repository": {
     "type": "git",
