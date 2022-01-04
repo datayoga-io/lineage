@@ -1,0 +1,55 @@
+name: Node.js Packages
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          registry-url: "https://npm.pkg.github.com"
+          # Defaults to the user or organization that owns the workflow file
+          scope: "@datayoga-io"
+      - name: update versions in repo
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - name: install
+        run: |
+          npm ci
+      - name: build, test
+        run: |
+          npm version patch
+          npm run build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: push version to repo
+        run: |
+          git push
+      - name: publish
+        run: |
+          npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
+  validate-install:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+      - name: install
+        run: |
+          npm install -g @datayoga-io/lineage
+      - name: test
+        run: |
+          lineage --help

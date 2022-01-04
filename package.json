@@ -1,36 +1,55 @@
 {
+  "name": "@datayoga-io/lineage",
+  "version": "1.0.2",
+  "description": "produce lineage documentation for data pipeline",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "prepare": "mkdir -p dist/ && touch dist/index.js",
+    "build": "tsc && chmod +x dist/cli.js"
+  },
+  "bin": {
+    "dy-lineage": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datayoga-io/lineage.git"
+  },
+  "keywords": [
+    "lineage",
+    "pyspark",
+    "bigdata",
+    "pipeline",
+    "ETL",
+    "ELT",
+    "snowflake",
+    "oracle",
+    "informatica",
+    "spss",
+    "dag"
+  ],
+  "author": "DataYoga",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/datayoga-io/lineage/issues"
+  },
+  "homepage": "https://github.com/datayoga-io/lineage",
   "dependencies": {
-    "@antv/g6": "^4.5.0",
     "@datayoga-io/node-g6": "^1.0.1",
-    "@types/handlebars": "^4.1.0",
-    "@types/marked": "^4.0.1",
-    "antlr4ts": "^0.5.0-alpha.4",
-    "antlr4ts-sql": "^1.1.0",
-    "canvas": "^2.8.0",
-    "chromium": "^3.0.3",
-    "cli-progress": "^3.9.1",
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
     "handlebars": "^4.7.7",
-    "js-yaml": "^4.1.0",
-    "jsdom": "^19.0.0",
-    "jsdom-global": "^3.0.2",
-    "klaw": "^4.0.1",
-    "knex": "^0.95.14",
-    "marked": "^4.0.8",
-    "material-icons": "^1.10.4",
-    "node-graphviz": "^0.1.0",
-    "rhombic": "^0.19.0",
-    "showdown": "^1.9.1",
-    "tedious": "^14.0.0",
-    "through2": "^4.0.2",
-    "through2-batch": "^1.1.1",
-    "webfontloader": "^1.6.28"
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@types/showdown": "^1.9.4",
     "antlr4ts-cli": "^0.5.0-alpha.4",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "@types/handlebars": "^4.1.0",
+    "@types/marked": "^4.0.1"
   }
 }
