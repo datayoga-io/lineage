@@ -26,8 +26,6 @@ jobs:
         run: |
           npm version patch
           npm run build
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: push version to repo
         run: |
           git push
@@ -35,7 +33,7 @@ jobs:
         run: |
           npm publish --access=public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM }}
       - uses: actions/setup-node@v2
         with:
           node-version: "16.x"
