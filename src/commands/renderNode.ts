@@ -126,7 +126,7 @@ function createLink(id: string, baseUrl: string = "") {
   let type = id.split(":")[0];
   let fullname = id.split(":")[1];
   let fullpath = fullname.split(".");
-  return `${baseUrl}${type}s/${fullpath.join("/")}/${
+  return `${baseUrl}/${type}s/${fullpath.join("/")}/${
     fullpath[fullpath.length - 1]
   }.md`;
 }
