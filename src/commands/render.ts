@@ -7,8 +7,12 @@ import * as fse from "fs-extra";
 import renderNode from "./renderNode";
 import { graphRenderOptions } from "./defaultOptions";
 
+function toPosix(inputPath: string) {
+  return inputPath.split(path.sep).join(path.posix.sep);
+}
+
 function loadCatalog(folder: string): any {
-  const files = glob.sync(path.join(folder, "catalog", "**", "*.yaml"));
+  const files = glob.sync(toPosix(path.join(folder, "catalog", "**", "*.yaml")));
   let catalog = {};
   for (let filename of files) {
     const contents = yaml.load(fs.readFileSync(filename, "utf8"));
@@ -19,14 +23,14 @@ function loadCatalog(folder: string): any {
 
 function loadPipeline(folder: string, pipeline: string): any | null {
   // load a pipeline file on demand
-  const filename = path.join(folder, "pipelines", pipeline + ".yaml");
+  const filename = toPosix(path.join(folder, "pipelines", pipeline + ".yaml"));
   if (fs.existsSync(filename)) {
     return yaml.load(fs.readFileSync(filename, "utf8"));
   } else return null;
 }
 
 function loadRelations(folder: string): any {
-  const files = glob.sync(path.join(folder, "relations", "**", "*.yaml"));
+  const files = glob.sync(toPosix(path.join(folder, "relations", "**", "*.yaml")));
   const relations = [];
   for (let filename of files) {
     const contents = yaml.load(fs.readFileSync(filename, "utf8"));
@@ -53,13 +57,13 @@ function registerHandleBarsHelpers() {
 
 export default async function render(argv) {
   // find templates folder
-  const templatesFolder = path.join(
+  const templatesFolder = toPosix(path.join(
     __dirname,
     "..",
     "..",
     "assets",
     "templates"
-  );
+  ));
 
   // load inputs
   const catalog = loadCatalog(argv.folder);
@@ -71,7 +75,7 @@ export default async function render(argv) {
   // load the partials
   //
   const files = glob;
-  for (const filename of glob.sync(path.join(templatesFolder, "_*.template"))) {
+  for (const filename of glob.sync(toPosix(path.join(templatesFolder, "_*.template")))) {
     Handlebars.registerPartial(
       path.basename(filename, ".template").substring(1),
       Handlebars.compile(fs.readFileSync(filename, "utf-8"))
@@ -80,13 +84,13 @@ export default async function render(argv) {
 
   // load the templates
   const pipelineTemplate = loadTemplate(
-    path.join(templatesFolder, "pipeline.template")
+    toPosix(path.join(templatesFolder, "pipeline.template"))
   );
   const datastoreTemplate = loadTemplate(
-    path.join(templatesFolder, "datastore.template")
+    toPosix(path.join(templatesFolder, "datastore.template"))
   );
   const fileTemplate = loadTemplate(
-    path.join(templatesFolder, "file.template")
+    toPosix(path.join(templatesFolder, "file.template"))
   );
 
   // merge the metadata to the pipelines
