@@ -38,16 +38,5 @@ Delimiter: {{@root.delimiter}}
 - [{{this.type}} - {{this.id}}]({{this.link}})
 {{/each}}
 
-# Direct Sources
-
-{{#each sources}}
-{{> store }}
-{{/each}}
-
-# Direct Targets
-
-{{#each targets}}
-{{> store }}
-{{/each}}
 
 
