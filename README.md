@@ -61,15 +61,17 @@ See the [Example](./example) folder for sample input files and generated output 
 ```
 .
 ├── .dyrc
-├── catalog
-├── relations
+├── datastores
+├── files
 ├── pipelines
+├── relations
 ```
 
 - `.dyrc`: Used to store global configuration.
-- `catalog`: Catalog files with information about the entities and their metadata
-- `relations`: Information about the relations between the data entities
+- `datastores`: Catalog file(s) with information about datastore entities and their metadata
+- `files`: Catalog file(s) with information about file datastore entities and their metadata
 - `pipelines`: Optional files containing information about the pipelines and business logic flow
+- `relations`: Information about the relations between the data entities
 
 ## Structure of catalog file
 
