@@ -1,4 +1,4 @@
-datastore:orders:
+- id: datastore:orders
   source: table
   doc: orders table
   schema:
@@ -14,7 +14,7 @@ datastore:orders:
       - name: name
         type: string
         doc: customer name
-datastore:raw_orders:
+- id: datastore:raw_orders
   source: table
   doc: raw_orders loaded from export files in ELT
   schema:

@@ -1,5 +1,5 @@
 | Column    | Type        | Comments |
 | --------- | ----------- | -------- |
 {{#each this.fields}}
-| {{this.name}} | {{this.type}} | {{this.doc}} |
+| {{this.name}} | {{this.type}} {{this.dateformat}} | {{this.doc}} |
 {{/each}}

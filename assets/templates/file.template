@@ -12,7 +12,15 @@
 - [Dependants](#dependants)
 
 # General <a name="general"></a>
+
 {{description}}
+Filename: {{filename}}
+Format: {{format}}
+{{#switch @root.format}}
+{{#case 'delimited'}}
+Delimiter: {{@root.delimiter}}
+{{/case}}
+{{/switch}}
 
 # Dependencies Lineage <a name="dependencies"></a>
 

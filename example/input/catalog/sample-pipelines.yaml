@@ -1,2 +1,0 @@
-pipeline:order_mgmt.load_orders:
-pipeline:ELT.load_raw_orders:

@@ -1,4 +1,4 @@
-file:exported_orders:
+- id: file:exported_orders
   filename: orders_{[0-9]}6.csv
   format: delimited
   delimiter: ","
@@ -9,10 +9,10 @@ file:exported_orders:
         type: int
         doc: order number
       - name: order_date
-        type: string
+        type: date
         dateformat: MM/dd/YYYY
         description: order date
-file:customers:
+- id: file:customers
   filename: customer_full.json
   doc: example of a json file with nested schema
   format: json
