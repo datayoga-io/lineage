@@ -8,6 +8,7 @@
 # {{id}}
 
 - [General](#general)
+- [Schema](#schema)
 - [Dependencies](#dependencies)
 - [Dependants](#dependants)
 
@@ -22,21 +23,16 @@ Delimiter: {{@root.delimiter}}
 {{/case}}
 {{/switch}}
 
+# Schema <a name="schema"></a>
+{{> schema this.schema }}
+
 # Dependencies Lineage <a name="dependencies"></a>
 
-![image](./dependencies.png)
-
-{{#each dependencies}}
-- [{{this.type}} - {{this.id}}]({{this.link}})
-{{/each}}
+{{>dependencies}}
 
 # Dependants Lineage <a name="dependants"></a>
 
-![image](./dependants.png)
-
-{{#each dependants}}
-- [{{this.type}} - {{this.id}}]({{this.link}})
-{{/each}}
+{{>dependants}}
 
 
 
