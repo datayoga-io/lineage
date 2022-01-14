@@ -15,14 +15,14 @@ Loads orders from raw order system. Performs the following calculation on order 
 # Dependencies Lineage <a name="dependencies"></a>
 
 ![image](./dependencies.png)
-- [file - exported_orders](https://github.com/datayoga-io/lineage/blob/master/example/output//files/exported_orders/exported_orders.md)
+- [file - exported_orders](https://github.com/datayoga-io/lineage/blob/main/example/output//files/exported_orders/exported_orders.md)
 
 # Dependants Lineage <a name="dependants"></a>
 
 ![image](./dependants.png)
-- [datastore - raw_orders](https://github.com/datayoga-io/lineage/blob/master/example/output//datastores/raw_orders/raw_orders.md)
-- [pipeline - order_mgmt.load_orders](https://github.com/datayoga-io/lineage/blob/master/example/output//pipelines/order_mgmt/load_orders/load_orders.md)
-- [datastore - orders](https://github.com/datayoga-io/lineage/blob/master/example/output//datastores/orders/orders.md)
+- [datastore - raw_orders](https://github.com/datayoga-io/lineage/blob/main/example/output//datastores/raw_orders/raw_orders.md)
+- [pipeline - order_mgmt.load_orders](https://github.com/datayoga-io/lineage/blob/main/example/output//pipelines/order_mgmt/load_orders/load_orders.md)
+- [datastore - orders](https://github.com/datayoga-io/lineage/blob/main/example/output//datastores/orders/orders.md)
 
 # Direct Sources
 

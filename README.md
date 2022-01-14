@@ -2,7 +2,7 @@
 
 This package allows to generate documentation of data pipelines and data lineage charts. It is source agnostic and uses a predefined json/yaml format to represent the dependencies and business logic. The resulting markdown files can be used standalone or as part of a documentation site using tools like [MkDocs](https://www.mkdocs.org/) or [VuePress](https://vuepress.vuejs.org/).
 
-![image](https://github.com/datayoga-io/lineage/blob/master/example/output/pipelines/order_mgmt/load_orders/dependencies.png?raw=true)
+![image](https://github.com/datayoga-io/lineage/blob/main/example/output/pipelines/order_mgmt/load_orders/dependencies.png?raw=true)
 
 # Installation
 
