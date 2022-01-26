@@ -11,10 +11,11 @@ function toPosix(inputPath: string) {
   return inputPath.split(path.sep).join(path.posix.sep);
 }
 
-function loadCatalog(folder: string): any {
-  const files = glob.sync(
-    toPosix(path.join(folder, "entities", "**", "*.yaml"))
-  );
+function loadEntities(folder: string): any {
+  const entitiesFolder = toPosix(path.join(folder, "entities", "**", "*.yaml"));
+  const files = glob.sync(entitiesFolder);
+  console.log(`Scanning folder ${entitiesFolder} for entities`);
+
   let catalog = {};
   for (let filename of files) {
     console.log(`Loading entities from ${filename}`);
@@ -113,6 +114,10 @@ async function renderNodeType({
 }
 
 export default async function render(argv) {
+  if (!fs.existsSync(argv.folder)) {
+    console.log(`Source folder ${argv.folder} does not exist`);
+    process.exit(1);
+  }
   console.log(`Building from ${argv.folder} into ${argv.dest}`);
   // find templates folder
   const templatesFolder = toPosix(
@@ -120,8 +125,15 @@ export default async function render(argv) {
   );
 
   // load inputs
-  console.log("Loading entities");
-  const catalog = loadCatalog(argv.folder);
+  console.log(`Loading entities`);
+  const catalog = loadEntities(argv.folder);
+  if (Object.keys(catalog).length == 0) {
+    // can not find entities
+    console.log(
+      "Can not find any entities. make sure the source folder is correct and there are yaml files describing the entities"
+    );
+    process.exit(1);
+  }
   console.log(`Found ${Object.keys(catalog).length} entities`);
   const relations = loadRelations(argv.folder);
 
@@ -148,7 +160,6 @@ export default async function render(argv) {
   // filter only the elements starting with datastore:
   //
   for (const nodeType of nodeTypes) {
-    console.log(`Rendering ${nodeType}s`);
     // load the template
     const template = loadTemplate(
       toPosix(path.join(templatesFolder, `${nodeType}.template`))
@@ -158,6 +169,7 @@ export default async function render(argv) {
         key.startsWith(nodeType + ":")
       )
     );
+    console.log(`Rendering ${Object.keys(entities).length} ${nodeType}s`);
     await renderNodeType({
       folder: argv.dest,
       nodeType: nodeType,
