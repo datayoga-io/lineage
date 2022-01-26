@@ -14,7 +14,7 @@ yargs
           type: "string",
         })
         .option("dest", {
-          alias: "d",
+          alias: ["d", "dist"],
           description: "destination directory",
           default: "./docs",
         })

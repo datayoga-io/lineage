@@ -130,6 +130,7 @@ export default async function render(argv) {
     console.log(`Source folder ${argv.folder} does not exist`);
     process.exit(1);
   }
+  const startTime = new Date();
   console.log(`Building from ${argv.folder} into ${argv.dest}`);
   // find templates folder
   const templatesFolder = toPosix(
@@ -194,5 +195,11 @@ export default async function render(argv) {
       },
     });
   }
+  const totalMilliseconds = new Date().getTime() - startTime.getTime();
+  console.log(
+    `Generated documentation to ${argv.dest} in ${
+      totalMilliseconds / 1000
+    } seconds`
+  );
   console.log("done");
 }

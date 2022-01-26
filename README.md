@@ -61,9 +61,10 @@ See the [Example](./example) folder for sample input files and generated output 
 ```
 .
 ├── .dyrc
-├── datastores
-├── files
-├── pipelines
+├── entities
+  ├── files
+  ├── pipelines
+  ├── datastores
 ├── relations
 ```
 
@@ -73,17 +74,103 @@ See the [Example](./example) folder for sample input files and generated output 
 - `pipelines`: Optional files containing information about the pipelines and business logic flow
 - `relations`: Information about the relations between the data entities
 
-## Structure of catalog file
+## Structure of entities files
 
-The catalog file contains the entity definition and metadata for each of the entities.
-The node naming convention is: `<entity type>`:`<optional module name>`.`<entity name>`. Module name can be nested: e.g. `order_mgmt.weekdays.inbound.load_orders`
+The `entities` folder contains the entity definition and metadata for each of the entities.
+Each folder can contain one or more files. For convenience, multiple entities can be located in the same yaml file. All `*.yaml` files are scanned.
+
+Whenever an ID is used, the ID naming convention is: `<entity type>`:`<optional module name>`.`<entity name>`. Module name can be nested: e.g. `order_mgmt.weekdays.inbound.load_orders`
+
+### Pipelines
+
+Example:
+
+````yml
+id: pipeline:order_mgmt.load_orders
+title: Load order from SAP
+description: |
+  Loads orders from raw order system. Performs the following calculation on order value:
+    ```order_value = order_qty * order_line_item_value```
+classification: PII
+metadata:
+  - triggers: file_arrival
+````
+
+`id`: unique identifier of this pipeline
+
+`title`: title to use for document
+
+`description`: description of the pipeline. Can use markdown format
+
+`classification`: data classification
+
+`metadata`: any key,value pairs under the metadata section will be presented as tags in the resulting document
+
+### Files
+
+Here is an example of a single yaml holding more than one source definition.
 
 Example:
 
 ```yml
-pipeline:order_mgmt.load_orders:
-datastore:orders:
-datastore:raw_orders:
+- id: file:exported_orders
+  filename: orders_{[0-9]}6.csv
+  format: delimited
+  delimiter: ","
+  header: true
+  schema:
+    fields:
+      - name: order_id
+        type: int
+        doc: order number
+      - name: order_date
+        type: date
+        dateformat: MM/dd/YYYY
+        description: order date
+- id: file:customers
+  filename: customer_full.json
+  doc: example of a json file with nested schema
+  format: json
+  schema:
+    type: record
+    fields:
+      - name: customer_id
+        type: int
+        doc: customer identifier
+      - name: address
+        type: record
+        fields:
+          - name: street
+            type: string
+          - name: city
+            type: string
+          - name: state
+            type: string
+          - name: zip
+            type: string
+```
+
+### Datastore
+
+Example:
+
+```yml
+- id: datastore:orders
+  source: table
+  doc: orders table
+  schema:
+    fields:
+      - name: order_id
+        type: int
+        doc: order number
+        primary_key: True
+      - name: customer_id
+        type: double
+        doc: customer number
+        primary_key: False
+      - name: name
+        type: string
+        doc: customer name
 ```
 
 ## Structure of relations file
@@ -98,19 +185,3 @@ Example:
 - source: pipeline:order_mgmt.load_orders
   target: datastore:orders
 ```
-
-## Adding metadata and business logic flow to pipelines
-
-TBD
-
-# Lineage collectors
-
-Lineage collectors enable to export lineage knowlege from external systems to be processed and documented.
-
-Coming soon
-
-## Informatica
-
-## Database data dictionary
-
-## Tableau
