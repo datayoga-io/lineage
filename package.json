@@ -1,6 +1,6 @@
 {
   "name": "@datayoga-io/lineage",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "produce lineage documentation for data pipeline",
   "main": "./dist/index.js",
   "scripts": {
