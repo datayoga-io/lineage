@@ -7,6 +7,8 @@ import * as fse from "fs-extra";
 import renderNode from "./renderNode";
 import { graphRenderOptions } from "./defaultOptions";
 
+const NODE_TYPES = ["pipeline", "table", "file", "datastore"];
+
 function toPosix(inputPath: string) {
   return inputPath.split(path.sep).join(path.posix.sep);
 }
@@ -28,6 +30,16 @@ function loadEntities(folder: string): any {
         result[entity.id] = entity;
         return result;
       }, {});
+      // check if we have invalid ids
+      for (let entry of Object.keys(entities)) {
+        if (!NODE_TYPES.includes(entry)) {
+          console.error(`Unknown id for entity: ${entry}`);
+          console.error(
+            `Make sure entity id starts with the entity type. Must be one of these: ${NODE_TYPES}`
+          );
+          process.exit(1);
+        }
+      }
       catalog = { ...catalog, ...entities };
     } else {
       // single object
@@ -155,7 +167,7 @@ export default async function render(argv) {
   // remove the docs folder
   fse.removeSync(argv.dest);
 
-  const nodeTypes = ["datastore", "pipeline", "datastore", "file"];
+  const nodeTypes = ["datastore", "pipeline", "file"];
   //
   // filter only the elements starting with datastore:
   //
