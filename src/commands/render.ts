@@ -32,7 +32,7 @@ function loadEntities(folder: string): any {
       }, {});
       // check if we have invalid ids
       for (let entry of Object.keys(entities)) {
-        if (!NODE_TYPES.includes(entry)) {
+        if (!NODE_TYPES.includes(entry.split(":")[0])) {
           console.error(`Unknown id for entity: ${entry}`);
           console.error(
             `Make sure entity id starts with the entity type. Must be one of these: ${NODE_TYPES}`
