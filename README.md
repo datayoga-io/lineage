@@ -185,3 +185,7 @@ Example:
 - source: pipeline:order_mgmt.load_orders
   target: datastore:orders
 ```
+
+# Related projects
+
+- [tracemodel](https://github.com/datayoga-io/tracemodel) - Lineage for numbers: a Python library for financial models in which each value keeps its source and each formula and check can be traced to the cells it read.
